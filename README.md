@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Claim Badge
 
-## Getting Started
+UI and back for claim nostr badge through QR code using NIP-05.
 
-First, run the development server:
+## Table of Contents
+
+- [Flow](#flow)
+- [Configuration](#configuration)
+- [To Do](#to-do)
+
+## Flow
+
+1. User scans QR code with the badge ID
+2. Is redirected to the claim page
+3. Fills the form with your NIP-05
+4. Sumbit and call the API to award the badge
+5. Back Award badge
+6. Success message
+
+![claim badge flow](./public/claim-badge-flow.svg)
+
+## Configuration
+
+### 1. Setup environment variables
+
+Copy `.env.example` to `.env` and fill the `NOSTR_SIGNER` with the private key of Nostr Badges emitter.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Use correct node version
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+nvm use
+```
 
-## Learn More
+Install the dependencies
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm i
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 3. Run in dev mode
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm dev
+```
 
-## Deploy on Vercel
+## To Do
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Front
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [ ] _Main page_ with QR to redirect to the claim page
+- [ ] _Claim page_
+
+### Back
+
+- [ ] Send award event
