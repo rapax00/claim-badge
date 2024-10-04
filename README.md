@@ -10,11 +10,11 @@ UI and back for claim nostr badge through QR code using NIP-05.
 
 ## Flow
 
-1. User scans QR code with the badge ID
-2. Is redirected to the claim page
+1. User scans QR code
+2. This redirected to the claim page
 3. Fills the form with your NIP-05
 4. Sumbit and call the API to award the badge
-5. Back Award badge
+5. Backend award badge
 6. Success message
 
 ![claim badge flow](./public/claim-badge-flow.svg)
@@ -50,6 +50,12 @@ pnpm dev
 ```
 
 ## To Do
+
+### Priority
+
+1. Claim badge from NIP-05
+2. Claim badge from LaWallet
+3. Claim badge using LaCard
 
 ### Front
 
