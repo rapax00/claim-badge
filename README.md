@@ -1,5 +1,11 @@
 # Claim Badge
 
+<!-- ![Latest Release](https://badgen.net/github/release/rapax00/claim-badge/stable/?color=blue&icon=bitcoin-lightning) -->
+
+![License](https://badgen.net/github/license/rapax00/claim-badge/?color=cyan)
+![Stars](https://badgen.net/github/stars/rapax00/claim-badge/?color=yellow)
+![Forks](https://badgen.net/github/forks/rapax00/claim-badge/?color=grey)
+
 UI and back for claim nostr badge through QR code using NIP-05.
 
 ## Table of Contents
