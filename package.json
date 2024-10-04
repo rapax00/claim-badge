@@ -6,14 +6,22 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "exec prettier . --write",
+    "format-spec": "prettier --write",
+    "check": "prettier . --check"
   },
   "dependencies": {
+    "@nostr-dev-kit/ndk": "^2.10.1",
     "@radix-ui/react-icons": "^1.3.0",
+    "@radix-ui/react-label": "^2.1.0",
+    "@radix-ui/react-slot": "^1.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.447.0",
     "next": "14.2.14",
+    "nostr-tools": "^2.7.2",
+    "qrcode.react": "^4.0.1",
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^2.5.3",
@@ -26,6 +34,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.14",
     "postcss": "^8",
+    "prettier": "^3.3.3",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
