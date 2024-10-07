@@ -85,5 +85,8 @@ export async function POST(request: Request) {
       401
     );
 
-  return NextResponse.json({ message: awardEvent }, { status: 200 });
+  return NextResponse.json(
+    { message: await awardEvent.toNostrEvent() },
+    { status: 200 }
+  );
 }
