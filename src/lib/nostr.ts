@@ -6,6 +6,7 @@ export function convertToBadgeDefinition(badge: NDKEvent): BadgeDefinition {
     id: badge.id,
     name: '',
     description: '',
+    created_at: 0,
     image: '',
     width: 0,
     height: 0,
