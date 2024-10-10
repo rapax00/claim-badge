@@ -9,6 +9,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -99,6 +100,16 @@ export function BadgeCarousel(params: BadgeCarouselProps) {
               BadgeInfo ID: {badges[currentIndex].id}
             </p>
           </CardContent>
+          <CardFooter>
+            <Button
+              className="w-full"
+              onClick={() =>
+                (window.location.href = `/claim/${badges[currentIndex].id}`)
+              }
+            >
+              Claim this Badge
+            </Button>
+          </CardFooter>
         </Card>
       )}
     </>
