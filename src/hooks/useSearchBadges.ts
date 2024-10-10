@@ -24,8 +24,6 @@ export const useSearchBadges = (
 ): useSubscriptionReturn => {
   const { filters } = params;
 
-  console.log('filters:', filters);
-
   const [badges, setBadges] = useState<BadgeDefinition[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,14 +39,19 @@ export const useSearchBadges = (
           console.log(
             '|--',
             '\n| Connected to relay:',
-            '\n| url:',
-            relay.url,
+            '\n| url:' + relay.url,
+            '\n| filters:' + filters,
             '\n|--'
-          );
+          ); // debug
 
           const sub = relay.subscribe(filters, {
             onevent(event) {
-              console.log('Event received:', event);
+              console.log(
+                '|---------------|',
+                '\n  Event received:',
+                event,
+                '\n|---------------|'
+              ); // debug
 
               const existingBadge = allBadges.find(
                 (badge) => badge.id === event.id
@@ -66,8 +69,10 @@ export const useSearchBadges = (
               }
 
               setBadges([...allBadges]);
+              setLoading(false);
             },
             oneose() {
+              // console.log('Subscription closed'); // debug
               sub.close();
             },
           });
@@ -75,8 +80,6 @@ export const useSearchBadges = (
       } catch (err) {
         setError('Error fetching badges');
         console.error(err);
-      } finally {
-        setLoading(false);
       }
     };
 

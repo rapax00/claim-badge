@@ -27,21 +27,22 @@ export function BadgeCarousel(params: BadgeCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [claimUrl, setClaimUrl] = useState<string | null>(null);
 
-  const { badges, loading, error } = useSearchBadges({
-    filters: [
+  const filters = React.useMemo(
+    () => [
       {
         authors: [publicKey],
         kinds: [30009],
         ids: badgesInfo.map((badge: BadgeInfo) => badge.definitionId),
       },
     ],
-  });
+    [publicKey, badgesInfo]
+  );
+
+  const { badges, loading, error } = useSearchBadges({ filters });
+
+  // console.log('useSearchBadges result:', { badges, loading, error }); // debug
 
   useEffect(() => {
-    console.log('badges:', badges);
-    console.log('loading:', loading);
-    console.log('error:', error);
-
     if (!loading) {
       setClaimUrl(
         `${typeof window !== 'undefined' ? window.location.origin : ''}/claim/${badges[currentIndex].id}`
