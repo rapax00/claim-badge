@@ -34,12 +34,15 @@ export function ClaimForm({ definitionId }: ClaimFormProps) {
     setResult(null);
 
     try {
-      const response = await fetch(`/api/request/${definitionId}`, {
+      const response = await fetch(`/api/badge/request`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ nip05 }),
+        body: JSON.stringify({
+          nip05,
+          badgeId: definitionId,
+        }),
       });
 
       const data = await response.json();
