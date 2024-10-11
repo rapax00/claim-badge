@@ -11,6 +11,7 @@ import { queryProfile } from 'nostr-tools/nip05';
 
 const relaysList = ['wss://relay.damus.io', 'wss://relay.hodl.ar'];
 const NOSTR_SIGNER = requiredEnvVar('NOSTR_SIGNER');
+const hexRegex = /^[0-9a-fA-F]{64}$/;
 
 const handleErrorResponse = (message: string, status: number) => {
   return NextResponse.json({ error: message }, { status });
@@ -20,7 +21,15 @@ export async function POST(request: Request) {
   if (!NOSTR_SIGNER) return handleErrorResponse('Missing admin signer', 422);
 
   const params = await request.json();
-  const { badgeId, nip05 } = params;
+  const { badgeId, nip05, pubkey } = params;
+
+  if (!nip05 && !pubkey)
+    return handleErrorResponse('Missing nip05 or pubkey on request', 401);
+
+  if (pubkey && !hexRegex.test(pubkey))
+    return handleErrorResponse('Invalid public key', 401);
+
+  let accountPubkey = pubkey ?? '';
 
   if (!badgeId)
     return handleErrorResponse(
@@ -28,10 +37,12 @@ export async function POST(request: Request) {
       401
     );
 
-  if (!nip05) return handleErrorResponse('Missing nip05 on request', 401);
+  if (!accountPubkey) {
+    const nip05Profile = await queryProfile(nip05);
+    if (!nip05Profile) return handleErrorResponse('Invalid nip05', 401);
 
-  const nip05Profile = await queryProfile(nip05);
-  if (!nip05Profile) return handleErrorResponse('Invalid nip05', 401);
+    accountPubkey = nip05Profile.pubkey;
+  }
 
   const signer = new NDKPrivateKeySigner(NOSTR_SIGNER);
   const signerPubkey = getPublicKey(hexToBytes(NOSTR_SIGNER));
@@ -62,7 +73,7 @@ export async function POST(request: Request) {
     kinds: [NDKKind.BadgeAward],
     authors: [signerPubkey],
     '#a': [badgeAddress],
-    '#p': [nip05Profile.pubkey],
+    '#p': [accountPubkey],
   });
 
   if (alreadyExistAward)
@@ -73,7 +84,7 @@ export async function POST(request: Request) {
 
   const awardEvent: NDKEvent = new NDKEvent(
     ndk,
-    buildAwardEvent(badgeAddress, signerPubkey, nip05Profile.pubkey)
+    buildAwardEvent(badgeAddress, signerPubkey, accountPubkey)
   );
 
   await awardEvent.sign();
