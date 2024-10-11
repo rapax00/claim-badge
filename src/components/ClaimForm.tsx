@@ -27,6 +27,7 @@ type ClaimFormProps = {
 export function ClaimForm({ definitionId }: ClaimFormProps) {
   const [nip05, setNip05] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isScanning, setIsScanning] = useState(false);
   const [result, setResult] = useState<{
     success: boolean;
     message: string;
@@ -76,7 +77,7 @@ export function ClaimForm({ definitionId }: ClaimFormProps) {
   const processNfcClaim = useCallback(
     async (response: LNURLResponse) => {
       console.log('processNfcClaim', response);
-      alert('Badge claimed successfully!');
+      alert(`Badge claimed successfully! ${response}`);
       // setCardStatus(LNURLWStatus.CALLBACK);
       // try {
       //   const claimResponse = await fetch(`/api/badge/claim-nfc`, {
@@ -112,17 +113,20 @@ export function ClaimForm({ definitionId }: ClaimFormProps) {
 
   const startNfcRead = useCallback(async () => {
     try {
-      setIsSubmitting(true);
+      setIsScanning(true);
       setResult(null);
       setNfcError(null);
 
       const lnurlResponse = await scan(ScanAction.EXTENDED_SCAN);
-      await processNfcClaim(lnurlResponse);
+
+      if (lnurlResponse.tag === 'laWallet:withdrawRequest') {
+        await processNfcClaim(lnurlResponse);
+      }
     } catch (e) {
       setCardStatus(LNURLWStatus.ERROR);
       setNfcError((e as Error).message);
     } finally {
-      setIsSubmitting(false);
+      setIsScanning(false);
     }
   }, [scan, processNfcClaim]);
 
@@ -208,10 +212,10 @@ export function ClaimForm({ definitionId }: ClaimFormProps) {
             <Button
               type="button"
               className="w-full"
-              disabled={isSubmitting}
+              disabled={isScanning}
               onClick={startNfcRead}
             >
-              {isSubmitting ? (
+              {isScanning ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Scanning NFC...
