@@ -90,11 +90,11 @@ export async function POST(request: Request) {
   await awardEvent.sign();
   await awardEvent.publish();
 
-  if (awardEvent.publishStatus === 'error')
-    return handleErrorResponse(
-      'An error occurred while trying to publish the award event',
-      401
-    );
+  // if (awardEvent.publishStatus === 'error')
+  //   return handleErrorResponse(
+  //     'An error occurred while trying to publish the award event',
+  //     401
+  //   );
 
   return NextResponse.json(
     { message: await awardEvent.toNostrEvent() },
