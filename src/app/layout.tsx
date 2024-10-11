@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { InjectedNFCProvider } from '@/context/InjectedNFC';
 
 export const metadata: Metadata = {
   title: 'Claim Badge',
@@ -13,10 +12,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <InjectedNFCProvider>
-      <html lang="en" suppressHydrationWarning>
-        <body>{children}</body>
-      </html>
-    </InjectedNFCProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body>{children}</body>
+    </html>
   );
 }
