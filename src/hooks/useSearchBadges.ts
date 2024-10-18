@@ -3,11 +3,11 @@ import { convertNostrToolsEventToBadgeDefinition } from '@/lib/nostr';
 import { BadgeDefinition } from '@/types/badge';
 import { Filter, Relay } from 'nostr-tools';
 
-export interface useSubscriptionProps {
+export interface useSearchBadgesProps {
   filters: Filter[];
 }
 
-export interface useSubscriptionReturn {
+export interface useSearchBadgesReturn {
   badges: BadgeDefinition[];
   loading: boolean;
   error: string | null;
@@ -19,11 +19,9 @@ const relaysUrl = [
   // 'wss://relay.damus.io',
 ];
 
-export const useSearchBadges = (
-  params: useSubscriptionProps
-): useSubscriptionReturn => {
-  const { filters } = params;
-
+export const useSearchBadges = ({
+  filters,
+}: useSearchBadgesProps): useSearchBadgesReturn => {
   const [badges, setBadges] = useState<BadgeDefinition[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
