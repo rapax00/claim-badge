@@ -192,39 +192,47 @@ export function ClaimForm({ definitionId }: ClaimFormProps) {
             </Alert>
           )}
         </CardContent>
-        <CardFooter className="flex flex-col space-y-2">
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={isSubmitting}
-            onClick={handleSubmit}
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Claiming...
-              </>
-            ) : (
-              'Claim Badge via NIP-05'
-            )}
-          </Button>
-          {isAvailable && (
+        <CardFooter className="flex justify-center items-center">
+          <div className="flex flex-col gap-2 w-full">
             <Button
-              type="button"
+              type="submit"
               className="w-full"
-              disabled={isScanning}
-              onClick={startNfcRead}
+              disabled={isSubmitting}
+              onClick={handleSubmit}
             >
-              {isScanning ? (
+              {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Scanning NFC...
+                  Claiming...
                 </>
               ) : (
-                'Claim Badge via NFC'
+                'Claim Badge via NIP-05'
               )}
             </Button>
-          )}
+            {isAvailable && (
+              <Button
+                type="button"
+                className="w-full"
+                disabled={isScanning}
+                onClick={startNfcRead}
+              >
+                {isScanning ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Scanning NFC...
+                  </>
+                ) : (
+                  'Claim Badge via NFC'
+                )}
+              </Button>
+            )}
+            <Button
+              className="w-full"
+              onClick={() => (window.location.href = `/`)}
+            >
+              Back to Badge Gallery
+            </Button>
+          </div>
         </CardFooter>
       </form>
     </Card>
