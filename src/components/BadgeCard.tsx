@@ -49,7 +49,11 @@ export function BadgeCard({ badge, onClose }: BadgeCardProps) {
               width={badge?.width}
               height={badge?.height}
             />
-            <QRCodeSVG value={badge.id || ''} size={200} level="H" />
+            <QRCodeSVG
+              value={`${window.location.origin}/claim/${badge.id}`}
+              size={200}
+              level="H"
+            />
           </motion.div>
         </AnimatePresence>
       </CardContent>
