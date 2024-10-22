@@ -10,7 +10,7 @@ import { getPublicKey } from 'nostr-tools';
 import { queryProfile } from 'nostr-tools/nip05';
 
 const relaysList = ['wss://relay.damus.io', 'wss://relay.hodl.ar'];
-const NOSTR_SIGNER = requiredEnvVar('NOSTR_SIGNER');
+const NOSTR_BADGE_EMITTER_PRIV = requiredEnvVar('NOSTR_BADGE_EMITTER_PRIV');
 const hexRegex = /^[0-9a-fA-F]{64}$/;
 
 const handleErrorResponse = (message: string, status: number) => {
@@ -18,7 +18,8 @@ const handleErrorResponse = (message: string, status: number) => {
 };
 
 export async function POST(request: Request) {
-  if (!NOSTR_SIGNER) return handleErrorResponse('Missing admin signer', 422);
+  if (!NOSTR_BADGE_EMITTER_PRIV)
+    return handleErrorResponse('Missing admin signer', 422);
 
   const params = await request.json();
   const { badgeId, nip05, pubkey } = params;
@@ -44,8 +45,8 @@ export async function POST(request: Request) {
     accountPubkey = nip05Profile.pubkey;
   }
 
-  const signer = new NDKPrivateKeySigner(NOSTR_SIGNER);
-  const signerPubkey = getPublicKey(hexToBytes(NOSTR_SIGNER));
+  const signer = new NDKPrivateKeySigner(NOSTR_BADGE_EMITTER_PRIV);
+  const signerPubkey = getPublicKey(hexToBytes(NOSTR_BADGE_EMITTER_PRIV));
 
   const ndk = new NDK({ explicitRelayUrls: relaysList, signer });
   await ndk.connect();
