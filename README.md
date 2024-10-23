@@ -12,6 +12,7 @@ UI and back for claim nostr badge through QR code using NIP-05.
 
 - [Flow](#flow)
 - [Configuration](#configuration)
+- [Endpoints](#endpoints)
 - [To Do](#to-do)
 
 ## Flow
@@ -29,7 +30,7 @@ UI and back for claim nostr badge through QR code using NIP-05.
 
 ### 1. Setup environment variables
 
-Copy `.env.example` to `.env` and fill the `NOSTR_SIGNER` with the private key of Nostr Badges emitter.
+Copy `.env.example` to `.env` and fill the `NOSTR_BADGE_EMITTER_PRIV` with the private key of Nostr Badges emitter and `NOSTR_BADGE_EMITTER_PUB` with the public key.
 
 ```bash
 cp .env.example .env
@@ -55,6 +56,46 @@ pnpm i
 pnpm dev
 ```
 
+## Endpoints
+
+### Admin login
+
+> Validate if the user is an admin and access the admin panel.
+
+`your_ticketing_domain/api/admin/login`
+
+- Validate the public key
+
+#### Parameters:
+
+```json
+{
+  "publicKey": <string, 32-bytes lowercase hex-encoded public key>
+}
+```
+
+#### Response:
+
+##### Valid
+
+```json
+{
+	"status": <boolean>,
+	"data": {
+    "message": <string>
+  }
+}
+```
+
+##### Invalid
+
+```json
+{
+	"status": <boolean>,
+	"errors": <string>
+}
+```
+
 ## To Do
 
 ### Priority
@@ -65,9 +106,9 @@ pnpm dev
 
 ### Front
 
-- [ ] _Main page_ with QR to redirect to the claim page
-- [ ] _Claim page_
+- [x] _Main page_ with QR to redirect to the claim page
+- [x] _Claim page_
 
 ### Back
 
-- [ ] Send award event
+- [x] Send award event
