@@ -19,13 +19,19 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useCard } from '@/hooks/useCard';
 import { ScanAction, ScanCardStatus } from '@/types/card';
 import { LNURLResponse, LNURLWStatus } from '@/types/lnurl';
+import { useSearchParams } from 'next/navigation';
 
 type ClaimFormProps = {
   definitionId: string;
   nonce: string;
 };
 
-export function ClaimForm({ definitionId, nonce }: ClaimFormProps) {
+export function ClaimForm() {
+  // Url params
+  const searchParams = useSearchParams();
+  const definitionId = searchParams.get('definitionid');
+  const nonce = searchParams.get('nonce');
+
   const [nip05, setNip05] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
