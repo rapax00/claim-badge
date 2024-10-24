@@ -45,7 +45,7 @@ export function convertNostrToolsEventToBadgeDefinition(
     id: badge.id,
     name: '',
     description: '',
-    created_at: 0,
+    created_at: badge.created_at,
     image: '',
     width: 0,
     height: 0,
@@ -57,7 +57,9 @@ export function convertNostrToolsEventToBadgeDefinition(
     // Name
     if (tag[0] === 'name') {
       badgeDefinition.name = tag[1];
-    } else if (tag[0] === 'description') {
+    }
+    // Description
+    else if (tag[0] === 'description') {
       badgeDefinition.description = tag[1];
     }
     // Image
