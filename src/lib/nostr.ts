@@ -1,6 +1,6 @@
 import { BadgeDefinition } from '@/types/badge';
 import { NDKEvent, NDKTag } from '@nostr-dev-kit/ndk';
-import { Event } from 'nostr-tools';
+import { Event, EventTemplate, finalizeEvent } from 'nostr-tools';
 
 export function convertNDKEventToBadgeDefinition(
   badge: NDKEvent
@@ -72,4 +72,21 @@ export function convertNostrToolsEventToBadgeDefinition(
   });
 
   return badgeDefinition;
+}
+
+export function makeAuthEvent(
+  privateKey: string,
+  definitionId: string
+): string {
+  const unsignedAuthEvent: EventTemplate = {
+    kind: 27240,
+    tags: [] as string[][],
+    content: JSON.stringify({ definitionId }),
+    created_at: Math.round(Date.now() / 1000),
+  };
+
+  const privKey = Uint8Array.from(Buffer.from(privateKey, 'hex'));
+  const authEvent: Event = finalizeEvent(unsignedAuthEvent, privKey);
+
+  return JSON.stringify(authEvent);
 }

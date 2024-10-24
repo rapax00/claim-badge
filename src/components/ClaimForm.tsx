@@ -22,9 +22,10 @@ import { LNURLResponse, LNURLWStatus } from '@/types/lnurl';
 
 type ClaimFormProps = {
   definitionId: string;
+  nonce: string;
 };
 
-export function ClaimForm({ definitionId }: ClaimFormProps) {
+export function ClaimForm({ definitionId, nonce }: ClaimFormProps) {
   const [nip05, setNip05] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
@@ -35,6 +36,39 @@ export function ClaimForm({ definitionId }: ClaimFormProps) {
   const [cardStatus, setCardStatus] = useState<LNURLWStatus>(LNURLWStatus.IDLE);
   const [nfcError, setNfcError] = useState<string | null>(null);
   const { isAvailable, status: scanStatus, scan, stop } = useCard();
+  const [isLoadingNonce, setIsLoadingNonce] = useState<boolean>(true);
+  const [isValidNonce, setIsValidNonce] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkNonce = async () => {
+      try {
+        const response = await fetch(`/api/admin/nonce/claim`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            nip05: 'test@test.com',
+            nonce,
+          }),
+        });
+
+        const resp = await response.json();
+
+        if (resp.data.message === 'Nonce claimed successfully') {
+          setIsValidNonce(true);
+          setIsLoadingNonce(false);
+        } else if (resp.data.message === 'Nonce expired') {
+          setIsValidNonce(false);
+          setIsLoadingNonce(false);
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any,  @typescript-eslint/no-unused-vars
+      } catch (error: any) {}
+    };
+
+    checkNonce();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,6 +108,7 @@ export function ClaimForm({ definitionId }: ClaimFormProps) {
     }
   };
 
+  /// CARD start
   const processNfcClaim = useCallback(
     async (response: LNURLResponse) => {
       console.log('processNfcClaim', response);
@@ -149,6 +184,7 @@ export function ClaimForm({ definitionId }: ClaimFormProps) {
       stop();
     };
   }, [stop]);
+  /// CARD end
 
   return (
     <Card className="w-full max-w-md">
@@ -156,6 +192,13 @@ export function ClaimForm({ definitionId }: ClaimFormProps) {
         <CardTitle>Claim NOSTR Badge</CardTitle>
         <CardDescription>
           Enter your NIP-05 address or use NFC to claim your badge
+          <br />
+          <br />
+          DEBUG
+          <br />
+          definitionId: {definitionId}
+          <br />
+          nonce: {nonce}
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
@@ -171,6 +214,26 @@ export function ClaimForm({ definitionId }: ClaimFormProps) {
               required
             />
           </div>
+          {isLoadingNonce && (
+            <Alert>
+              <AlertTitle>Loading...</AlertTitle>
+              <AlertDescription>Validating nonce...</AlertDescription>
+            </Alert>
+          )}
+          {isValidNonce && (
+            <Alert variant="default">
+              <AlertTitle>Nonce Valid</AlertTitle>
+              <AlertDescription>Your nonce is valid!</AlertDescription>
+            </Alert>
+          )}
+          {!isValidNonce && !isLoadingNonce && (
+            <Alert variant="destructive">
+              <AlertTitle>Nonce Invalid</AlertTitle>
+              <AlertDescription>
+                Your nonce is invalid or has expired.
+              </AlertDescription>
+            </Alert>
+          )}
           {result && (
             <Alert variant={result.success ? 'default' : 'destructive'}>
               <AlertTitle>{result.success ? 'Success' : 'Error'}</AlertTitle>
