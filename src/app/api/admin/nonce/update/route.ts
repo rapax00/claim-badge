@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { claimNonce } from '@/lib/prisma';
+import { updateNonce } from '@/lib/prisma';
 
 export async function POST(req: NextRequest) {
   try {
@@ -7,28 +7,26 @@ export async function POST(req: NextRequest) {
       throw new Error('Method not allowed');
     }
 
-    const { nonce } = await req.json();
+    const { nonce, nip05 } = await req.json();
 
-    if (!nonce) {
+    if (!nonce || !nip05) {
       throw new Error('Missing nonce or nip05');
     }
 
-    const isNonceClaimed = await claimNonce(nonce);
+    const isNonceUpdated = await updateNonce(nonce, nip05);
 
-    if (isNonceClaimed) {
+    if (isNonceUpdated) {
       return NextResponse.json({
         status: 200,
         data: {
-          claimed: true,
-          message: 'Nonce claimed successfully',
+          updated: true,
         },
       });
     } else {
       return NextResponse.json({
         status: 200,
         data: {
-          claimed: false,
-          message: 'Nonce expired',
+          updated: false,
         },
       });
     }

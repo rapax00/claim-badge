@@ -48,17 +48,16 @@ export function ClaimForm({ definitionId, nonce }: ClaimFormProps) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            nip05: 'test@test.com',
             nonce,
           }),
         });
 
         const resp = await response.json();
 
-        if (resp.data.message === 'Nonce claimed successfully') {
+        if (resp.data.claimed) {
           setIsValidNonce(true);
           setIsLoadingNonce(false);
-        } else if (resp.data.message === 'Nonce expired') {
+        } else if (resp.data.message) {
           setIsValidNonce(false);
           setIsLoadingNonce(false);
         }
@@ -91,6 +90,21 @@ export function ClaimForm({ definitionId, nonce }: ClaimFormProps) {
 
       if (response.ok) {
         setResult({ success: true, message: 'Badge claimed successfully!' });
+
+        const response = await fetch(`/api/admin/nonce/update`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            nonce,
+            nip05,
+          }),
+        });
+
+        if (!response.ok || !(await response.json()).data.updated) {
+          throw new Error('Failed to update nonce');
+        }
       } else {
         setResult({
           success: false,

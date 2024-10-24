@@ -9,9 +9,9 @@ async function createNonce(definitionId: string): Promise<string> {
   return nonce.value;
 }
 
-async function claimNonce(value: string, nip05: string): Promise<boolean> {
+async function claimNonce(nonceValue: string): Promise<boolean> {
   return await prisma.$transaction(async (tx) => {
-    const nonce = await tx.nonce.findUnique({ where: { value } });
+    const nonce = await tx.nonce.findUnique({ where: { value: nonceValue } });
     if (!nonce) {
       throw new Error('Nonce not found');
     }
@@ -26,8 +26,8 @@ async function claimNonce(value: string, nip05: string): Promise<boolean> {
     }
 
     const nonceUpdate = await tx.nonce.update({
-      where: { value },
-      data: { claimedBy: nip05, usedAt: currentTime },
+      where: { value: nonceValue },
+      data: { usedAt: currentTime },
     });
 
     if (!nonceUpdate) {
@@ -38,4 +38,26 @@ async function claimNonce(value: string, nip05: string): Promise<boolean> {
   });
 }
 
-export { createNonce, claimNonce };
+async function updateNonce(
+  nonceValue: string,
+  nip05: string
+): Promise<boolean> {
+  return await prisma.$transaction(async (tx) => {
+    const nonceUpdate = await tx.nonce.update({
+      where: {
+        value: nonceValue,
+      },
+      data: {
+        claimedBy: nip05,
+      },
+    });
+
+    if (!nonceUpdate) {
+      throw new Error('Failed to update nonce');
+    }
+
+    return true;
+  });
+}
+
+export { createNonce, claimNonce, updateNonce };
