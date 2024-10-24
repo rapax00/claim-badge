@@ -13,12 +13,12 @@ export async function POST(req: NextRequest) {
       throw new Error('Unauthorized');
     }
 
-    return NextResponse.json({ status: true, data: { message: 'Authorized' } });
+    return NextResponse.json({ status: 200, data: { message: 'Authorized' } });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    return NextResponse.json(
-      { status: false, errors: error.message || 'Internal Server Error' },
-      { status: error.statusCode || 500 }
-    );
+    return NextResponse.json({
+      status: error.statusCode || 500,
+      data: { errors: error.message || 'Internal Server Error' },
+    });
   }
 }
