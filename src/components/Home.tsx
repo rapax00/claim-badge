@@ -42,7 +42,7 @@ export default function Home({ publicKey, badgesInfo }: HomeProps) {
       </div>
       <footer className="mt-8 text-center text-sm text-gray-600">
         <p>Powered by La Crypta</p>
-        <p>© 2024 LaBitConf</p>
+        <p>© 2024 Nostr Booth</p>
       </footer>
     </div>
   );
