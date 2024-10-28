@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { getPublicKey } from 'nostr-tools';
 
@@ -57,6 +57,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
 
       setIsAuthenticated(true);
+      localStorage.setItem('secret', key);
       setPrivateKey(key);
       toast({
         title: 'Success',
@@ -74,6 +75,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       });
     }
   };
+
+  useEffect(() => {
+    const secret = window.localStorage.getItem('secret');
+
+    if (secret) {
+      setIsAuthenticated(true);
+      setPrivateKey(secret);
+    }
+  }, []);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, privateKey, handleLogin }}>
