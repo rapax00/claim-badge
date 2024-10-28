@@ -21,7 +21,7 @@ async function claimNonce(nonceValue: string): Promise<boolean> {
     const timeDifference =
       (currentTime.getTime() - creationTime.getTime()) / 1000; // Convert to seconds
 
-    if (timeDifference > 10) {
+    if (timeDifference > 60) {
       return false;
     }
 
