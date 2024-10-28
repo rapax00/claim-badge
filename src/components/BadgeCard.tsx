@@ -25,6 +25,7 @@ interface BadgeCardProps {
 
 export function BadgeCard({ badge, onClose }: BadgeCardProps) {
   const [nonce, setNonce] = useState<string | null>(null);
+  const [remainingTime, setRemainingTime] = useState<number>(16);
   const { privateKey } = useAuth();
 
   const fetchNonce = async () => {
@@ -53,9 +54,19 @@ export function BadgeCard({ badge, onClose }: BadgeCardProps) {
 
   useEffect(() => {
     fetchNonce(); // Initial fetch
-    const intervalId = setInterval(fetchNonce, 10000);
+    const intervalId = setInterval(() => {
+      fetchNonce();
+      setRemainingTime(16); // Reset remaining time on fetch
+    }, 17000);
 
-    return () => clearInterval(intervalId); // Cleanup on unmount
+    const countdownId = setInterval(() => {
+      setRemainingTime((prev) => (prev > 0 ? prev - 1 : 0)); // Countdown logic
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId); // Cleanup on unmount
+      clearInterval(countdownId); // Cleanup countdown
+    };
   }, []);
 
   const handleClaim = () => {
@@ -98,16 +109,43 @@ export function BadgeCard({ badge, onClose }: BadgeCardProps) {
                 level="H"
               />
             )}
+            <div className="text-center mt-2">
+              <div className="relative w-24 h-24">
+                <svg
+                  className="absolute top-0 left-0"
+                  width="100%"
+                  height="100%"
+                >
+                  <circle
+                    cx="50%"
+                    cy="50%"
+                    r="15"
+                    stroke="lightgray"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <circle
+                    cx="50%"
+                    cy="50%"
+                    r="15"
+                    stroke="blue"
+                    strokeWidth="4"
+                    fill="none"
+                    strokeDasharray={`${(remainingTime / 16) * 100} ${100}`}
+                    style={{ transition: 'stroke-dasharray 1s linear' }}
+                  />
+                </svg>
+                <span className="absolute inset-0 flex items-center justify-center text-lg font-bold">
+                  {remainingTime > 0 ? remainingTime : '...'}
+                </span>
+              </div>
+            </div>
           </motion.div>
         </AnimatePresence>
       </CardContent>
       <CardFooter className="flex justify-center items-center">
         <div className="flex flex-col gap-2 w-full">
-          <Button
-            className="w-full"
-            onClick={handleClaim}
-            disabled={!nonce} // Disable button if nonce is not available
-          >
+          <Button className="w-full" onClick={handleClaim} disabled={!nonce}>
             Claim this Badge
           </Button>
           <Button className="w-full" onClick={onClose}>
