@@ -249,12 +249,12 @@ export function ClaimForm() {
                   <AlertDescription>{result.message}</AlertDescription>
                 </Alert>
               )}
-              {nfcError && (
+              {/* {nfcError && (
                 <Alert variant="destructive">
                   <AlertTitle>NFC Error</AlertTitle>
                   <AlertDescription>{nfcError}</AlertDescription>
                 </Alert>
-              )}
+              )} */}
               <CardFooter className="flex justify-center items-center">
                 <div className="flex flex-col gap-2 w-full">
                   <Button
@@ -272,7 +272,7 @@ export function ClaimForm() {
                       'Claim Badge via NIP-05'
                     )}
                   </Button>
-                  {isAvailable && (
+                  {/* {isAvailable && (
                     <Button
                       type="button"
                       className="w-full"
@@ -288,7 +288,7 @@ export function ClaimForm() {
                         'Claim Badge via NFC'
                       )}
                     </Button>
-                  )}
+                  )} */}
                 </div>
               </CardFooter>
             </>
