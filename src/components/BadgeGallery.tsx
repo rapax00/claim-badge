@@ -69,50 +69,41 @@ export function BadgeGallery({ badges, loading, error }: BadgeGalleryProps) {
           />
         </div>
       ) : (
-        <Card className="w-full max-w-4xl">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold text-center">
-              Badge Gallery
-            </CardTitle>
-            <CardDescription className="text-center">
-              Explore and claim your NOSTR badges
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {badges.map((badge, index) => (
-                <motion.div
-                  key={badge.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                >
-                  <Card className="h-full flex flex-col">
-                    <CardHeader>
-                      <CardTitle className="text-xl font-semibold text-center truncate">
-                        {badge.name}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex-grow flex items-center justify-center p-4">
-                      <Image
-                        className="rounded-lg max-w-full max-h-[200px] object-contain"
-                        src={badge.image}
-                        alt={badge.name}
-                        width={200}
-                        height={200}
-                      />
-                    </CardContent>
-                    <CardFooter className="flex justify-center">
-                      <Button onClick={() => setSelectedBadge(badge)} size="sm">
-                        Select Badge
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        <>
+          <h2 className="text-lg font-bold">Badge Gallery</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {badges.map((badge, index) => (
+              <motion.div
+                key={badge.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+              >
+                <Card className="h-full flex flex-col">
+                  <CardHeader>
+                    <CardTitle className="text-xl font-semibold text-center truncate">
+                      {badge.name}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-grow flex items-center justify-center p-4">
+                    <Image
+                      className="rounded-lg max-w-full max-h-[200px] object-contain"
+                      src={badge.image}
+                      alt={badge.name}
+                      width={200}
+                      height={200}
+                    />
+                  </CardContent>
+                  <CardFooter className="flex justify-center">
+                    <Button onClick={() => setSelectedBadge(badge)} size="sm">
+                      Select Badge
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </>
       )}
     </>
   );

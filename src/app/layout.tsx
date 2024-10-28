@@ -14,8 +14,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>{children}</body>
-      <Toaster />
+      <body className="min-w-screen w-full min-h-screen h-full">
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }
