@@ -211,112 +211,96 @@ export function ClaimForm() {
       <CardHeader>
         <CardTitle>Claim NOSTR Badge</CardTitle>
         <CardDescription>
-          Enter your NIP-05 address or use NFC to claim your badge
+          {/* Enter your NIP-05 address or use NFC to claim your badge
           <br />
           <br />
           DEBUG
           <br />
           definitionId: {definitionId}
           <br />
-          nonce: {nonce}
+          nonce: {nonce} */}
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="nip05">NIP-05 Address</Label>
-            <Input
-              id="nip05"
-              type="text"
-              placeholder="you@example.com"
-              value={nip05}
-              onChange={(e) => setNip05(e.target.value)}
-              required
-            />
-          </div>
-          {isLoadingNonce && (
+          {isLoadingNonce ? (
             <Alert>
               <AlertTitle>Loading...</AlertTitle>
-              <AlertDescription>Validating nonce...</AlertDescription>
+              <AlertDescription>Validating link.</AlertDescription>
             </Alert>
-          )}
-          {isValidNonce && (
-            <Alert variant="default">
-              <AlertTitle>Nonce Valid</AlertTitle>
-              <AlertDescription>Your nonce is valid!</AlertDescription>
-            </Alert>
-          )}
-          {!isValidNonce && !isLoadingNonce && (
+          ) : isValidNonce ? (
+            <>
+              <div className="space-y-2">
+                <Label htmlFor="nip05">NIP-05 Address (walias)</Label>
+                <Input
+                  id="nip05"
+                  type="text"
+                  placeholder="you@lawallet.ar"
+                  value={nip05}
+                  onChange={(e) => setNip05(e.target.value)}
+                  required
+                />
+              </div>
+              {result && (
+                <Alert variant={result.success ? 'default' : 'destructive'}>
+                  <AlertTitle>
+                    {result.success ? 'Success' : 'Error'}
+                  </AlertTitle>
+                  <AlertDescription>{result.message}</AlertDescription>
+                </Alert>
+              )}
+              {nfcError && (
+                <Alert variant="destructive">
+                  <AlertTitle>NFC Error</AlertTitle>
+                  <AlertDescription>{nfcError}</AlertDescription>
+                </Alert>
+              )}
+              <CardFooter className="flex justify-center items-center">
+                <div className="flex flex-col gap-2 w-full">
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={isSubmitting}
+                    onClick={handleSubmit}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Claiming...
+                      </>
+                    ) : (
+                      'Claim Badge via NIP-05'
+                    )}
+                  </Button>
+                  {isAvailable && (
+                    <Button
+                      type="button"
+                      className="w-full"
+                      disabled={isScanning}
+                      onClick={startNfcRead}
+                    >
+                      {isScanning ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Scanning NFC...
+                        </>
+                      ) : (
+                        'Claim Badge via NFC'
+                      )}
+                    </Button>
+                  )}
+                </div>
+              </CardFooter>
+            </>
+          ) : (
             <Alert variant="destructive">
-              <AlertTitle>Nonce Invalid</AlertTitle>
+              <AlertTitle>Invalid</AlertTitle>
               <AlertDescription>
-                Your nonce is invalid or has expired.
-              </AlertDescription>
-            </Alert>
-          )}
-          {result && (
-            <Alert variant={result.success ? 'default' : 'destructive'}>
-              <AlertTitle>{result.success ? 'Success' : 'Error'}</AlertTitle>
-              <AlertDescription>{result.message}</AlertDescription>
-            </Alert>
-          )}
-          {nfcError && (
-            <Alert variant="destructive">
-              <AlertTitle>NFC Error</AlertTitle>
-              <AlertDescription>{nfcError}</AlertDescription>
-            </Alert>
-          )}
-          {cardStatus === LNURLWStatus.SCANNING && (
-            <Alert>
-              <AlertTitle>NFC</AlertTitle>
-              <AlertDescription>
-                Ready to scan NFC. Please tap your card.
+                Your link is invalid or has expired.
               </AlertDescription>
             </Alert>
           )}
         </CardContent>
-        <CardFooter className="flex justify-center items-center">
-          <div className="flex flex-col gap-2 w-full">
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isSubmitting}
-              onClick={handleSubmit}
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Claiming...
-                </>
-              ) : (
-                'Claim Badge via NIP-05'
-              )}
-            </Button>
-            {isAvailable && (
-              <Button
-                type="button"
-                className="w-full"
-                disabled={isScanning}
-                onClick={startNfcRead}
-              >
-                {isScanning ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Scanning NFC...
-                  </>
-                ) : (
-                  'Claim Badge via NFC'
-                )}
-              </Button>
-            )}
-            <Button
-              className="w-full"
-              onClick={() => (window.location.href = `/`)}
-            >
-              Back to Badge Gallery
-            </Button>
-          </div>
-        </CardFooter>
       </form>
     </Card>
   );
