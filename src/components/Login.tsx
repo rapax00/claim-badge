@@ -44,23 +44,23 @@ export default function Login() {
       {isAuthenticated ? (
         <Home publicKey={publicKey} badgesInfo={badgesInfo} />
       ) : (
-        <Card className="w-full max-w-md mx-auto ">
+        <Card className="w-full max-w-md mx-auto mt-8">
           <CardHeader>
             <CardTitle>Admin Login</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-col items-center gap-2">
               <Input
                 type="password"
                 value={privateKey}
                 onChange={(e) => setPrivateKey(e.target.value)}
                 placeholder="Enter private key"
               />
-              <Button onClick={handleLoginClick} className="w-fit">
+              <Button onClick={handleLoginClick} className="w-full">
                 Login
               </Button>
             </div>
-            <div className="flex items-center space-x-2">
+            {/* <div className="flex items-center space-x-2">
               <Button
                 onClick={() =>
                   toast({ description: 'Not implemented yet', duration: 3000 })
@@ -70,7 +70,7 @@ export default function Login() {
                 <QrCodeIcon className="h-4 w-4 mr-2" />
                 Scan QR Code
               </Button>
-            </div>
+            </div> */}
           </CardContent>
         </Card>
       )}

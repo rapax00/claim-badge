@@ -32,20 +32,14 @@ export default function Home({ publicKey, badgesInfo }: HomeProps) {
   const { badges, loading, error } = useSearchBadges({ filters });
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 flex flex-col items-center justify-center p-4">
-      <Card className="w-full max-w-4xl">
-        <CardHeader>
-          <CardTitle className="text-4xl font-bold text-center">
-            NOSTR Badge Claim
-          </CardTitle>
-          <CardDescription className="text-center">
-            Discover and claim your NOSTR badges
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <BadgeGallery badges={badges} loading={loading} error={error} />
-        </CardContent>
-      </Card>
+    <div className="flex flex-col justify-center w-full h-full mx-auto p-4">
+      <div className="flex flex-col gap-4 w-full max-w-2xl mx-auto px-4">
+        <div className="flex flex-col gap-1 w-full mx-auto">
+          <h1 className="text-2xl font-bold">NOSTR Badge Claim</h1>
+          <p className="">Discover and claim your NOSTR badges</p>
+        </div>
+        <BadgeGallery badges={badges} loading={loading} error={error} />
+      </div>
       <footer className="mt-8 text-center text-sm text-gray-600">
         <p>Powered by La Crypta</p>
         <p>© 2024 LaBitConf</p>
