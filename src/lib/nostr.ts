@@ -51,27 +51,36 @@ export function convertNostrToolsEventToBadgeDefinition(
     height: 0,
   };
 
-  const tags: string[][] = badge.tags;
+  try {
+    const tags: string[][] = badge.tags;
 
-  tags.find((tag) => {
-    // Name
-    if (tag[0] === 'name') {
-      badgeDefinition.name = tag[1];
-    }
-    // Description
-    else if (tag[0] === 'description') {
-      badgeDefinition.description = tag[1];
-    }
-    // Image
-    else if (tag[0] === 'image') {
-      badgeDefinition.image = tag[1];
+    tags.find((tag) => {
+      // Name
+      if (tag[0] === 'name') {
+        badgeDefinition.name = tag[1];
+      }
+      // Description
+      else if (tag[0] === 'description') {
+        badgeDefinition.description = tag[1];
+      }
+      // Image
+      else if (tag[0] === 'image') {
+        badgeDefinition.image = tag[1];
 
-      const size = tag[2].split('x');
+        if (tag[2]) {
+          const size = tag[2].split('x');
 
-      badgeDefinition.width = parseInt(size[0]);
-      badgeDefinition.height = parseInt(size[1]);
-    }
-  });
+          badgeDefinition.width = parseInt(size[0]);
+          badgeDefinition.height = parseInt(size[1]);
+        }
+      }
+    });
+  } catch (error) {
+    console.error(
+      'Error converting NostrTools event to badge definition:',
+      error
+    );
+  }
 
   return badgeDefinition;
 }

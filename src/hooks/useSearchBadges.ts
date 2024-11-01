@@ -15,8 +15,8 @@ export interface useSearchBadgesReturn {
 
 const relaysUrl = [
   'wss://relay.hodl.ar',
-  // 'wss://nos.lol',
-  // 'wss://relay.damus.io',
+  'wss://nos.lol',
+  'wss://relay.damus.io',
 ];
 
 export const useSearchBadges = ({
@@ -47,6 +47,8 @@ export const useSearchBadges = ({
               console.log(
                 '|---------------|',
                 '\n  Event received:',
+                '\n  Relay URL:',
+                url,
                 event,
                 '\n|---------------|'
               ); // debug
