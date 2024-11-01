@@ -99,8 +99,8 @@ export function BadgeCard({ badge, onClose }: BadgeCardProps) {
               className="rounded-lg max-w-[350px] max-h-[350px] object-contain"
               src={badge.image}
               alt={badge.name}
-              width={badge?.width}
-              height={badge?.height}
+              width={badge?.width | 350}
+              height={badge?.height | 350}
             />
             {nonce && (
               <QRCodeSVG
