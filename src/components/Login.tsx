@@ -14,31 +14,31 @@ const publicKey: string = process.env.NEXT_NOSTR_BADGE_EMITTER_PUB!;
 
 // Simple info for search badges
 const badgesInfo: BadgeInfo[] = [
-  // {
-  //   name: 'Nostr-Booth-LABITCONF',
-  //   definitionId:
-  //     'b420bc2ce8f9f60356e06267b1b016255a4b2e63b3edacd8b438581b1b4f2094',
-  // },
   {
-    name: 'Nostr-Booth-SATSCONF',
+    name: 'Nostr-Booth-LABITCONF',
     definitionId:
-      '000005bfbdc4512fd24ec1a794bbd5f445b135b24ca394f5823a939c89817ce2',
+      'b420bc2ce8f9f60356e06267b1b016255a4b2e63b3edacd8b438581b1b4f2094',
   },
+  // {
+  //   name: 'Nostr-Booth-SATSCONF',
+  //   definitionId:
+  //     '000005bfbdc4512fd24ec1a794bbd5f445b135b24ca394f5823a939c89817ce2',
+  // },
   // {
   //   name: 'Nostr-Booth-Adopting-Bitcoin',
   //   definitionId:
   //     '000007634de69bb3d495abc9462e4320950263f81822c5759b31fd5d578daaa8',
   // },
-  // {
-  //   name: 'Nostr-Day',
-  //   definitionId:
-  //     '000002dbef49cc816f00b52d3a7de40fd930180ce0ca9f5404003fa4938b36cd',
-  // },
-  // {
-  //   name: 'Halloween-III',
-  //   definitionId:
-  //     '0000067b5538c500c6383661ab912f848a0a1a3df660368d792c234f69552fdb',
-  // },
+  {
+    name: 'Nostr-Day',
+    definitionId:
+      '000002dbef49cc816f00b52d3a7de40fd930180ce0ca9f5404003fa4938b36cd',
+  },
+  {
+    name: 'Halloween-III',
+    definitionId:
+      '0000067b5538c500c6383661ab912f848a0a1a3df660368d792c234f69552fdb',
+  },
   // {
   //   name: 'test-1',
   //   definitionId:
