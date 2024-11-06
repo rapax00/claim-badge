@@ -17,6 +17,7 @@ import { BadgeDefinition } from '@/types/badge';
 import Image from 'next/image';
 import { makeAuthEvent } from '@/lib/nostr';
 import { useAuth } from '@/hooks/useAuth';
+import { getPublicKey } from 'nostr-tools';
 
 interface BadgeCardProps {
   badge: BadgeDefinition;
@@ -26,7 +27,7 @@ interface BadgeCardProps {
 export function BadgeCard({ badge, onClose }: BadgeCardProps) {
   const [nonce, setNonce] = useState<string | null>(null);
   const [remainingTime, setRemainingTime] = useState<number>(16);
-  const { privateKey } = useAuth();
+  const privateKey = process.env.NEXT_NOSTR_BADGE_EMITTER_PRIV!;
 
   const fetchNonce = async () => {
     try {
