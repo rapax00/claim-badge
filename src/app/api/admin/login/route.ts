@@ -6,19 +6,27 @@ export async function POST(req: NextRequest) {
       throw new Error('Method not allowed');
     }
 
-    const { publicKey } = await req.json();
+    const { password } = await req.json();
 
     // Authentication
-    if (publicKey !== process.env.NEXT_NOSTR_BADGE_EMITTER_PUB) {
-      throw new Error('Unauthorized');
+    if (password !== process.env.PASSWORD) {
+      return NextResponse.json(
+        { data: { message: 'Unauthorized' } },
+        { status: 200 }
+      );
     }
 
-    return NextResponse.json({ status: 200, data: { message: 'Authorized' } });
+    return NextResponse.json(
+      { data: { message: 'Authorized' } },
+      { status: 200 }
+    );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    return NextResponse.json({
-      status: error.statusCode || 500,
-      data: { errors: error.message || 'Internal Server Error' },
-    });
+    return NextResponse.json(
+      {
+        data: error.message || 'Internal Server Error',
+      },
+      { status: error.statusCode || 500 }
+    );
   }
 }

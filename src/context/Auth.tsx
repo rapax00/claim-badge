@@ -2,19 +2,16 @@
 
 import { createContext, useEffect, useState } from 'react';
 import { toast } from '@/hooks/use-toast';
-import { getPublicKey } from 'nostr-tools';
 
 // Interface
 export interface AuthContext {
   isAuthenticated: boolean;
-  privateKey: string | null;
   handleLogin: (key: string) => Promise<void>;
 }
 
 // Context
 export const AuthContext = createContext<AuthContext>({
   isAuthenticated: false,
-  privateKey: null,
   handleLogin: function (): Promise<void> {
     throw new Error('Function not implemented.');
   },
@@ -26,11 +23,10 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [privateKey, setPrivateKey] = useState<string | null>(null);
 
-  const handleLogin = async (key: string) => {
+  const handleLogin = async (_password: string) => {
     try {
-      if (!key) {
+      if (!_password) {
         toast({
           title: 'Error',
           description: 'Private key is required',
@@ -40,25 +36,28 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         return;
       }
 
-      const privKey = Uint8Array.from(Buffer.from(key, 'hex'));
-      const publicKey = getPublicKey(privKey);
-
       const response = await fetch('/api/admin/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ publicKey }),
+        body: JSON.stringify({ password: _password }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
+        console.log('errorData', errorData);
         throw new Error(`${errorData.errors || response.statusText}`);
       }
 
+      const data = await response.json();
+
+      if (data.data.message === 'Unauthorized') {
+        throw new Error('Unauthorized access');
+      }
+
       setIsAuthenticated(true);
-      localStorage.setItem('secret', key);
-      setPrivateKey(key);
+      localStorage.setItem('secret', _password);
       toast({
         title: 'Success',
         description: 'Logged in successfully',
@@ -81,12 +80,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     if (secret) {
       setIsAuthenticated(true);
-      setPrivateKey(secret);
     }
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, privateKey, handleLogin }}>
+    <AuthContext.Provider value={{ isAuthenticated, handleLogin }}>
       {children}
     </AuthContext.Provider>
   );

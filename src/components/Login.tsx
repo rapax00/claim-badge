@@ -58,10 +58,10 @@ const badgesInfo: BadgeInfo[] = [
 
 export default function Login() {
   const { handleLogin, isAuthenticated } = useAuth();
-  const [privateKey, setPrivateKey] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleLoginClick = () => {
-    handleLogin(privateKey);
+    handleLogin(password);
   };
 
   return (
@@ -77,8 +77,8 @@ export default function Login() {
             <div className="flex flex-col items-center gap-2">
               <Input
                 type="password"
-                value={privateKey}
-                onChange={(e) => setPrivateKey(e.target.value)}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter private key"
               />
               <Button onClick={handleLoginClick} className="w-full">
