@@ -14,16 +14,16 @@ const publicKey: string = process.env.NEXT_NOSTR_BADGE_EMITTER_PUB!;
 
 // Simple info for search badges
 const badgesInfo: BadgeInfo[] = [
-  {
-    name: 'Nostr-Booth-LABITCONF',
-    definitionId:
-      'b420bc2ce8f9f60356e06267b1b016255a4b2e63b3edacd8b438581b1b4f2094',
-  },
   // {
-  //   name: 'Nostr-Booth-SATSCONF',
+  //   name: 'Nostr-Booth-LABITCONF',
   //   definitionId:
-  //     '000005bfbdc4512fd24ec1a794bbd5f445b135b24ca394f5823a939c89817ce2',
+  //     'b420bc2ce8f9f60356e06267b1b016255a4b2e63b3edacd8b438581b1b4f2094',
   // },
+  {
+    name: 'Nostr-Booth-SATSCONF',
+    definitionId:
+      '000005bfbdc4512fd24ec1a794bbd5f445b135b24ca394f5823a939c89817ce2',
+  },
   // {
   //   name: 'Nostr-Booth-Adopting-Bitcoin',
   //   definitionId:
