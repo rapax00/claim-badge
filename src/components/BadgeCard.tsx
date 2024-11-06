@@ -146,9 +146,9 @@ export function BadgeCard({ badge, onClose }: BadgeCardProps) {
       </CardContent>
       <CardFooter className="flex justify-center items-center">
         <div className="flex flex-col gap-2 w-full">
-          <Button className="w-full" onClick={handleClaim} disabled={!nonce}>
+          {/* <Button className="w-full" onClick={handleClaim} disabled={!nonce}>
             Claim this Badge
-          </Button>
+          </Button> */}
           <Button className="w-full" onClick={onClose}>
             Back
           </Button>
