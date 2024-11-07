@@ -32,7 +32,7 @@ export function ClaimForm() {
   const definitionId = searchParams.get('definitionid');
   const nonce = searchParams.get('nonce');
 
-  const [nip05, setNip05] = useState('');
+  const [user, setUser] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
   const [result, setResult] = useState<{
@@ -81,6 +81,16 @@ export function ClaimForm() {
     setResult(null);
 
     try {
+      let nip05, npub, pubkey;
+
+      if (user.includes('@')) {
+        nip05 = user;
+      } else if (user.startsWith('npub')) {
+        npub = user;
+      } else {
+        pubkey = user;
+      }
+
       const response = await fetch(`/api/badge/request`, {
         method: 'POST',
         headers: {
@@ -88,6 +98,8 @@ export function ClaimForm() {
         },
         body: JSON.stringify({
           nip05,
+          npub,
+          pubkey,
           badgeId: definitionId,
         }),
       });
@@ -231,13 +243,15 @@ export function ClaimForm() {
           ) : isValidNonce ? (
             <>
               <div className="space-y-2">
-                <Label htmlFor="nip05">NIP-05 Address (walias)</Label>
+                <Label htmlFor="nip05">
+                  <strong>NIP-05</strong> (walias) or <strong>npub</strong>
+                </Label>
                 <Input
                   id="nip05"
                   type="text"
-                  placeholder="you@lawallet.ar"
-                  value={nip05}
-                  onChange={(e) => setNip05(e.target.value)}
+                  placeholder="you@lawallet.ar or npub..."
+                  value={user}
+                  onChange={(e) => setUser(e.target.value)}
                   required
                 />
               </div>

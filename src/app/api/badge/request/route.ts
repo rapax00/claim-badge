@@ -6,7 +6,7 @@ import NDK, {
   NDKPrivateKeySigner,
 } from '@nostr-dev-kit/ndk';
 import { NextResponse } from 'next/server';
-import { getPublicKey } from 'nostr-tools';
+import { getPublicKey, nip19 } from 'nostr-tools';
 import { queryProfile } from 'nostr-tools/nip05';
 
 const relaysList = ['wss://relay.damus.io', 'wss://relay.hodl.ar'];
@@ -22,28 +22,40 @@ export async function POST(request: Request) {
     return handleErrorResponse('Missing admin signer', 422);
 
   const params = await request.json();
-  const { badgeId, nip05, pubkey } = params;
+  const { badgeId, nip05, pubkey, npub } = params;
 
-  if (!nip05 && !pubkey)
+  if (!nip05 && !pubkey && !npub)
     return handleErrorResponse('Missing nip05 or pubkey on request', 401);
 
+  // pubkey (hex)
   if (pubkey && !hexRegex.test(pubkey))
     return handleErrorResponse('Invalid public key', 401);
 
   let accountPubkey = pubkey ?? '';
 
-  if (!badgeId)
-    return handleErrorResponse(
-      'Missing badge definition event id (badgeId)',
-      401
-    );
+  // npub (nip19)
+  if (npub && !npub.startsWith('npub')) {
+    return handleErrorResponse('Invalid npub', 401);
+  } else {
+    const { data: pubkey } = nip19.decode(npub);
+    if (!pubkey) return handleErrorResponse('Invalid npub ajja', 401);
 
+    accountPubkey = pubkey;
+  }
+
+  // nip05
   if (!accountPubkey) {
     const nip05Profile = await queryProfile(nip05);
     if (!nip05Profile) return handleErrorResponse('Invalid nip05', 401);
 
     accountPubkey = nip05Profile.pubkey;
   }
+
+  if (!badgeId)
+    return handleErrorResponse(
+      'Missing badge definition event id (badgeId)',
+      401
+    );
 
   const signer = new NDKPrivateKeySigner(NOSTR_BADGE_EMITTER_PRIV);
   const signerPubkey = getPublicKey(hexToBytes(NOSTR_BADGE_EMITTER_PRIV));
