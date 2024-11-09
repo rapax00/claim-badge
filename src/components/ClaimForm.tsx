@@ -283,7 +283,7 @@ export function ClaimForm() {
                         Claiming...
                       </>
                     ) : (
-                      'Claim Badge via NIP-05'
+                      'Claim Badge'
                     )}
                   </Button>
                   {/* {isAvailable && (
