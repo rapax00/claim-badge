@@ -9,7 +9,11 @@ import { NextResponse } from 'next/server';
 import { getPublicKey, nip19 } from 'nostr-tools';
 import { queryProfile } from 'nostr-tools/nip05';
 
-const relaysList = ['wss://relay.damus.io', 'wss://relay.hodl.ar'];
+const relaysList = [
+  'wss://relay.damus.io',
+  'wss://relay.hodl.ar',
+  'wss://nos.lol',
+];
 const NOSTR_BADGE_EMITTER_PRIV = requiredEnvVar('NOSTR_BADGE_EMITTER_PRIV');
 const hexRegex = /^[0-9a-fA-F]{64}$/;
 const npubRegex = /^npub1[02-9ac-hj-np-z]{58,59}$/;
